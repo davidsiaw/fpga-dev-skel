@@ -1,0 +1,7 @@
+name=tangnano4k
+device_name=GW1NSR-LV4CQN48PC7/I6
+gowin_class=
+apicula_class=GW1NSR-LV4C
+freq_mhz=27
+gowin_cst=fpga/tangnano4k.cst
+apicula_cst=fpga/tangnano4k.cst
