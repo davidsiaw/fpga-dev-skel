@@ -5,3 +5,4 @@ apicula_class=GW1NSR-LV4C
 freq_mhz=27
 gowin_cst=fpga/tangnano4k.cst
 apicula_cst=fpga/tangnano4k.cst
+defines=GOWIN_GW1NSR_4_CHIP SIPEED_TANGNANO4K

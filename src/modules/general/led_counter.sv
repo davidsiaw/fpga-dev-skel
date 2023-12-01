@@ -1,9 +1,8 @@
-
 // Return the max bit for a particular value
 function int value_max_bit;
   input int value;
 
-  value_max_bit = $clog2(value + 1);
+  return $clog2(value + 1);
 
 endfunction
 
@@ -23,7 +22,7 @@ reg [5:0]             c_led_counter;
 reg [COUNTER_WIDTH:0] c_clock_counter;
 
 always_comb begin
-  if (in_rst == 0) begin
+  if (in_rst == 1) begin
     c_clock_counter = 0;
     c_led_counter = 0;
   end
@@ -45,7 +44,6 @@ always_ff @(posedge in_clk) begin
   r_led_counter <= c_led_counter;
   r_clock_counter <= c_clock_counter;
 end
-
 
 assign out_led = ~r_led_counter;
 
