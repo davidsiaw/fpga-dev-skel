@@ -43,29 +43,16 @@ always @(posedge clk_27mhz) begin
 
 end
 
-assign lcd_led_en = 1;
+assign lcd_led_en = ~reset;
 
-//assign reset = ~rst_btn | ~clk_lock;
 
-// Clk_33_3MHZ pll(
-//   .in_clk_27mhz(clk_27mhz),
-//   .out_clk_199_8mhz(fclk),
-//   .out_clk_33_3mhz(clk_33_3mhz),
-//   .out_clk_lock(clk_lock)
-// );
-
-rPLL #( // For GW1NR-9C C6/I5 (Tang Nano 9K proto dev board)
-  .FCLKIN("27"),
-  .IDIV_SEL(2), // -> PFD = 9 MHz (range: 3-400 MHz)
-  .FBDIV_SEL(9), // -> CLKOUT = 90 MHz (range: 3.125-600 MHz)
-  .DYN_SDIV_SEL(10),
-  .ODIV_SEL(8) // -> VCO = 720 MHz (range: 400-1200 MHz)
-) pll (.CLKOUTP(), .CLKOUTD3(), .RESET(1'b0), .RESET_P(1'b0), .CLKFB(1'b0), .FBDSEL(6'b0), .IDSEL(6'b0), .ODSEL(6'b0), .PSDA(4'b0), .DUTYDA(4'b0), .FDLY(4'b0),
-  .CLKIN(clk_27mhz), // 27 MHz
-  .CLKOUT(fclk), // 90 MHz
-  .CLKOUTD(clk_9mhz), // 9 MHz
-  .LOCK(clk_lock)
+Clk_9MHZ clk9(
+  .in_clk_27mhz(clk_27mhz),
+  .out_clk_90mhz(fclk),
+  .out_clk_9mhz(clk_9mhz),
+  .out_clk_lock(clk_lock)
 );
+
 
 wire [9:0] pixelx;
 wire [9:0] pixely;
@@ -87,17 +74,69 @@ TftLcd_480_272 lcd(
 );
 
 
-LedCounter #(
-    .WAIT_TIME(1)
-  )
-c (
-  .in_rst(reset),
-  .in_clk(ssync),
-  .out_led(led)
-);
+// LedCounter #(
+//     .WAIT_TIME(1)
+//   )
+// c (
+//   .in_rst(reset),
+//   .in_clk(ssync),
+//   .out_led(led)
+// );
 
-assign lcd_r = (pixely[3] ^ pixelx[3]) ? 5'b11111 : 0;
-assign lcd_g = (pixely[4] ^ pixelx[4]) ? 6'b111111 : 0;;
-assign lcd_b = (pixely[5] ^ pixelx[5]) ? 5'b11111 : 0;;
+reg [4:0] rdata;
+reg [5:0] gdata;
+reg [4:0] bdata;
+
+reg [6:0] xtile;
+reg [6:0] ytile;
+
+// 60 x 34 8x8 squares
+always @(posedge ssync) begin
+  if (xtile == 59) begin
+    xtile <= 0;
+  end
+  else begin
+    xtile <= xtile + 1;
+  end
+
+  if (xtile == 59) begin
+    ytile <= ytile + 1;
+  end
+  else if (ytile == 33) begin
+    ytile <= 0;
+  end
+  else begin
+    ytile <= ytile;
+  end
+end
+
+wire [9:0] px1;
+wire [9:0] py1;
+
+assign px1 = pixelx - 1;
+assign py1 = pixely - 1;
+
+always @(posedge clk_9mhz) begin
+  
+  if (   (pixelx >= xtile * 8 && pixelx < (xtile + 1) * 8)
+      && (pixely >= ytile * 8 && pixely < (ytile + 1) * 8) ) begin
+    rdata <= 5'b11111;
+  end
+  else begin
+    rdata <= (pixely[3] ^ pixelx[3]) ? 5'b01111 : 0;
+  end
+
+  gdata <= (pixely[4] ^ pixelx[4]) ? 6'b001111 : 0;
+  bdata <= (pixely[5] ^ pixelx[5]) ? 5'b01111 : 0;
+end
+
+assign led = ~xtile[5:0];
+assign lcd_r = rdata;
+assign lcd_g = gdata;
+assign lcd_b = bdata;
+
+// assign lcd_r = (pixely[3] ^ pixelx[3]) ? 5'b11111 : 0;
+// assign lcd_g = (pixely[4] ^ pixelx[4]) ? 6'b111111 : 0;;
+// assign lcd_b = (pixely[5] ^ pixelx[5]) ? 5'b11111 : 0;;
 
 endmodule

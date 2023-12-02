@@ -14,6 +14,11 @@ module TftLcd_480_272
     output       out_clk
 );
 
+// These timing numbers do not correspond with anything that is written in the
+// datasheet provided at https://dl.sipeed.com/TANG/Nano%209K/6_Chip_Manual/EN/LCD_Datasheet/
+// These numbers come from analyzing code that works from
+// https://dl.sipeed.com/TANG/Nano%209K/6_Chip_Manual/EN/LCD_Datasheet/
+// ¯\_(ツ)_/¯ tbh
 localparam      pixel_width   = 16'd480;
 localparam      h_front_porch = 16'd50;
 localparam      hsync_pulse = 16'd4;
@@ -104,14 +109,14 @@ always_comb begin
 		if      (r_vcounter == vsync_pulse + v_back_porch + pixel_height + v_front_porch) begin
 			c_fcounter = r_fcounter + 1;
 		end
-		else if (r_fcounter == 60) begin
+		else if (r_fcounter == 59) begin
 			c_fcounter = 0;
 		end
 		else begin
 			c_fcounter = r_fcounter;
 		end
 
-		if (r_fcounter == 60) begin
+		if (r_fcounter == 59) begin
 			c_ssync = 1;
 		end
 		else begin
@@ -119,8 +124,17 @@ always_comb begin
 		end
 	end
 
-	c_pixelx = r_hcounter - hsync_pulse + h_back_porch;
-	c_pixely = r_vcounter - vsync_pulse + v_back_porch - 1;
+	// These numbers were found via trial and error.
+	// These represent the clock delay with which a module receiving
+	// pixelx and pixely values must set the appropriate pixel colors
+	`define DELAY_X -11;
+	`define DELAY_Y -7;
+
+	c_pixelx = r_hcounter - hsync_pulse - h_back_porch + `DELAY_X;
+	c_pixely = r_vcounter - vsync_pulse - v_back_porch + `DELAY_Y;
+
+	`undef DELAY_X
+	`undef DELAY_Y
 end
 
 reg [9:0] r_hcounter;
@@ -152,7 +166,7 @@ end
 
 assign out_hsync   = r_hsync;
 assign out_vsync   = r_vsync;
-assign out_ssync   = r_ssync;
+assign out_ssync   = r_ssync ;
 
 assign out_en      = r_en & in_9mhz_clk & ~in_rst;
 assign out_pixelx  = r_pixelx;
