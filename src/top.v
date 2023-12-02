@@ -18,10 +18,6 @@ module top
 
 //assign led = ~6'b011000;
 
-wire fclk;
-wire clk_lock;
-wire clk_9mhz;
-
 reg reset = 1;
 
 
@@ -45,14 +41,18 @@ end
 
 assign lcd_led_en = ~reset;
 
+wire fclk;
+wire clk_lock;
+wire clk;
 
 Clk_9MHZ clk9(
   .in_clk_27mhz(clk_27mhz),
   .out_clk_90mhz(fclk),
-  .out_clk_9mhz(clk_9mhz),
+  .out_clk_9mhz(clk),
   .out_clk_lock(clk_lock)
 );
 
+wire clk_9mhz = clk & clk_lock;
 
 wire [9:0] pixelx;
 wire [9:0] pixely;
@@ -61,7 +61,7 @@ wire ssync;
 
 TftLcd_480_272 lcd(
     .in_rst(reset),
-    .in_9mhz_clk(clk_9mhz & clk_lock),
+    .in_9mhz_clk(clk_9mhz),
 
     .out_en(lcd_en),
     .out_hsync(lcd_hsync),
@@ -113,10 +113,7 @@ end
 wire [9:0] px1;
 wire [9:0] py1;
 
-assign px1 = pixelx - 1;
-assign py1 = pixely - 1;
-
-always @(posedge clk_9mhz) begin
+always @(posedge clk_27mhz) begin
   
   if (   (pixelx >= xtile * 8 && pixelx < (xtile + 1) * 8)
       && (pixely >= ytile * 8 && pixely < (ytile + 1) * 8) ) begin

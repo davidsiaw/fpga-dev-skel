@@ -41,7 +41,7 @@ IO_LOC "lcd_vsync" 34;
 IO_LOC "lcd_hsync" 40;
 
 IO_LOC "lcd_led_en" 86;
-
+IO_PORT "lcd_led_en" OPEN_DRAIN=ON;
 
 IO_LOC "rst_btn" 4;
 // IO_LOC "usr_btn" 3;

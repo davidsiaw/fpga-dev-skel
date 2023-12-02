@@ -56,7 +56,6 @@ always_comb begin
 
 		c_pixelx = 0;
 		c_pixely = 0;
-
 	end
 	else begin
 		if      (r_hcounter == hsync_pulse + h_back_porch) begin
@@ -168,10 +167,10 @@ assign out_hsync   = r_hsync;
 assign out_vsync   = r_vsync;
 assign out_ssync   = r_ssync ;
 
-assign out_en      = r_en & in_9mhz_clk & ~in_rst;
+assign out_en      = r_en & in_9mhz_clk ;
 assign out_pixelx  = r_pixelx;
 assign out_pixely  = r_pixely;
 
-assign out_clk     = in_9mhz_clk & ~in_rst;
+assign out_clk     = in_9mhz_clk;
 
 endmodule
