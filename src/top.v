@@ -12,8 +12,7 @@ module top
     output [5:0] lcd_g,
     output [4:0] lcd_r,
 
-    output       lcd_clk,
-    output       lcd_led_en
+    output       lcd_clk
 );
 
 //assign led = ~6'b011000;
@@ -36,10 +35,7 @@ always @(posedge clk_27mhz) begin
     resetcounter <= resetcounter;
     reset <= 0;
   end
-
 end
-
-assign lcd_led_en = ~reset;
 
 wire fclk;
 wire clk_lock;

@@ -7,6 +7,8 @@ VERILOG_FILES=$(shell find src -type f -name '*.v') $(patsubst src/%.sv,obj/sv2v
 
 TARGET_DIR=obj/args
 
+all: apicula gowin
+
 # produce defines for verilog from target
 obj/defines: $(TARGET_DIR)/defines
 	mkdir -p $@
@@ -35,8 +37,6 @@ $(TARGET_DIR)/%: targets/$(TARGET)
 	  IFS='=' read -ra toks <<< "$$line"; \
 	  echo "$${toks[1]}" > "$(TARGET_DIR)/$${toks[0]}"; \
 	done
-
-all: apicula gowin
 
 clean:
 	rm -rf obj
