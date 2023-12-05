@@ -49,7 +49,7 @@ obj/gowin_constraints: $(shell cat obj/args/gowin_cst)
 	    echo "add_file ../$$filename" >> $@ ; \
 	done
 
-obj/gowin_settings: obj/args/device_name obj/args/gowin_class
+obj/gowin_settings: obj/args/device_name obj/args/gowin_class obj/args/topmodule
 	mkdir -p obj
 	echo "" > $@
 	echo "set_option -synthesis_tool gowinsynthesis" >> $@
@@ -57,7 +57,7 @@ obj/gowin_settings: obj/args/device_name obj/args/gowin_class
 	echo "set_device $(shell cat obj/args/device_name) $(shell cat obj/args/gowin_class)" >> $@
 	echo "set_option -use_sspi_as_gpio 1" >> $@
 	echo "set_option -use_mspi_as_gpio 1" >> $@
-	echo "set_option -top_module $(TOP)" >> $@
+	echo "set_option -top_module $(shell cat obj/args/topmodule)" >> $@
 
 
 obj/gowin.tcl: obj/gowin_verilogfiles obj/gowin_constraints obj/gowin_settings

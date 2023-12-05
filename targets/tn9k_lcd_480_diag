@@ -5,5 +5,5 @@ apicula_class=GW1N-9C
 freq_mhz=27
 gowin_cst=fpga/tangnano9k.cst
 apicula_cst=fpga/tangnano9k.cst
-defines=GOWIN_GW1NR_9_CHIP SIPEED_TANGNANO9K
-topmodule=top
+defines=GOWIN_GW1NR_9_CHIP SIPEED_TANGNANO9K TN9K_LCD_480_DIAG
+topmodule=tn9k_lcd_480_diag

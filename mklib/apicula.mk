@@ -22,9 +22,9 @@ obj/apicula_defines: obj/defines
 	    echo "verilog_defines -D$$filename=`cat $$filename`" >> $@; \
 	done
 
-obj/apicula_synth:
+obj/apicula_synth: obj/args/topmodule
 	mkdir -p obj
-	echo "synth_gowin -json obj/apicula.json -top $(TOP)" > $@
+	echo "synth_gowin -json obj/apicula.json -top $(shell cat obj/args/topmodule)" > $@
 
 obj/apicula.ys: obj/apicula_defines obj/apicula_verilogfiles obj/apicula_synth
 	mkdir -p obj
