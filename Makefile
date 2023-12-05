@@ -1,3 +1,4 @@
+SHELL=bash
 TARGET:=tangnano9k # The board to flash. available targets are in the targets folder.
 TOP:=top           # The top module to use.
 

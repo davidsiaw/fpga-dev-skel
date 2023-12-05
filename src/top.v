@@ -17,38 +17,40 @@ module top
 
 //assign led = ~6'b011000;
 
-reg reset = 1;
+wire reset;
 
 
-reg [31:0] resetcounter = 0;
+// reg [31:0] resetcounter = 0;
 
-always @(posedge clk_27mhz) begin
-  if (resetcounter <= 27000000 * 2) begin
-    reset <= 1;
-    resetcounter <= resetcounter + 1;
-  end
-  else if (rst_btn == 0) begin
-    reset <= 1;
-    resetcounter <= 0;
-  end
-  else begin
-    resetcounter <= resetcounter;
-    reset <= 0;
-  end
-end
+// always @(posedge clk_27mhz) begin
+//   if (resetcounter <= 27 * 2) begin
+//     reset <= 1;
+//     resetcounter <= resetcounter + 1;
+//   end
+//   else if (rst_btn == 0) begin
+//     reset <= 1;
+//     resetcounter <= 0;
+//   end
+//   else begin
+//     resetcounter <= resetcounter;
+//     reset <= 0;
+//   end
+// end
 
 wire fclk;
 wire clk_lock;
-wire clk;
+wire clk_9mhz;
 
 Clk_9MHZ clk9(
   .in_clk_27mhz(clk_27mhz),
   .out_clk_90mhz(fclk),
-  .out_clk_9mhz(clk),
+  .out_clk_9mhz(clk_9mhz),
   .out_clk_lock(clk_lock)
 );
 
-wire clk_9mhz = clk & clk_lock;
+//wire clk_9mhz = clk & clk_lock; // It is dangerous to do this for now: the clock is distributed unchanged along fast dedicated lines, while the clock after logical operations travels along slow regular routes. Come up with something else, use Clock Enable on the target DFF or something.
+
+assign reset = ~clk_lock | ~rst_btn;
 
 wire [9:0] pixelx;
 wire [9:0] pixely;
@@ -112,7 +114,8 @@ wire [9:0] py1;
 always @(posedge clk_27mhz) begin
   
   if (   (pixelx >= xtile * 8 && pixelx < (xtile + 1) * 8)
-      && (pixely >= ytile * 8 && pixely < (ytile + 1) * 8) ) begin
+       && (pixely >= ytile * 8 && pixely < (ytile + 1) * 8)
+     ) begin
     rdata <= 5'b11111;
   end
   else begin
