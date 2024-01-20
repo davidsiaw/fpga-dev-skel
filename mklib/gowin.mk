@@ -70,7 +70,7 @@ obj/gowin.tcl: obj/gowin_verilogfiles obj/gowin_constraints obj/gowin_settings
 	echo "run all" >> $@
 
 obj/impl/pnr/gowin.fs: obj/gowin.tcl
-	$(GWSH) | tee obj/gowin_eda.log
+	$(GWSH) $(subst totee,gowin_eda,$(TEE))
 
 obj/gowin.fs: obj/impl/pnr/gowin.fs
 	cp $< $@

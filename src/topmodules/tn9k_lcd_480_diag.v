@@ -43,7 +43,7 @@ wire fclk;
 wire clk_lock;
 wire clk_9mhz;
 
-Clk_9MHZ clk9(
+Clk_9Mhz clk9(
   .in_clk_27mhz(clk_27mhz),
   .out_clk_540mhz(fclk),
   .out_clk_9mhz(clk_9mhz),
