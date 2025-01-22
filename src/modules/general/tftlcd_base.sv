@@ -128,7 +128,7 @@ assign out_ssync   = r_ssync;
 
 assign out_en      = (r_hcounter >= HPIXELSTART &&
                       r_hcounter <  H_SYNC_LENGTH + H_BACK_PORCH + H_PIXEL_LENGTH &&
-                      r_vcounter > V_SYNC_LENGTH) ? 1 : 0;
+                      r_vcounter >  V_SYNC_LENGTH) ? 1 : 0;
 
 assign out_pixelx  = r_pixelx;
 assign out_pixely  = r_pixely;

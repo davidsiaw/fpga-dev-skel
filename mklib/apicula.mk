@@ -1,6 +1,6 @@
 # build gowin fs using yosys
 
-APICULA_DOCKER_PREFIX=docker run --rm -v $(PWD):/src --workdir /src
+APICULA_DOCKER_PREFIX=docker run --rm -v $$(pwd):/src --workdir /src
 APICULA_DOCKER_IMAGE=davidsiaw/ocs
 APICULA_CMD_PREFIX=$(APICULA_DOCKER_PREFIX) $(APICULA_DOCKER_IMAGE)
 APICULA_FREQ := 27

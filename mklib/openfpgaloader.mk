@@ -1,7 +1,7 @@
 # make utils for openFPGAloader
 
 OFL_DOCKER_IMAGE=davidsiaw/ocs
-OFL_DOCKER_PREFIX=docker run --rm -v $(PWD):/src --workdir /src
+OFL_DOCKER_PREFIX=docker run --rm -v $$(pwd):/src --workdir /src
 OFL_DOCKER_IMAGE=davidsiaw/ocs
 OFL_CMD_PREFIX=$(OFL_DOCKER_PREFIX) $(OFL_DOCKER_IMAGE)
 

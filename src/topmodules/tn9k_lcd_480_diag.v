@@ -90,8 +90,23 @@ reg [4:0] bdata;
 reg [6:0] xtile;
 reg [6:0] ytile;
 
+reg [4:0] delay_counter;
+reg pulse; // signal to advance the square
+always @(posedge lcd_vsync) begin
+  // this time is the number of frames to wait before pulsing
+  if (delay_counter == 10) begin
+    delay_counter <= 0;
+    pulse <= 1;
+  end
+  else begin
+    delay_counter <= delay_counter + 1;
+    pulse <= 0;
+  end
+end
+
 // 60 x 34 8x8 squares
-always @(posedge ssync) begin
+// advance on pulse
+always @(posedge pulse) begin
   if (reset) begin
     xtile <= 0;
     ytile <= 0;

@@ -1,7 +1,7 @@
 SHELL=bash
-TARGET:=tangnano9k # available targets are in the targets folder.
+TARGET:=tn9k_count_diag # available targets are in the targets folder.
 
-SV2V_CMD=docker run --rm -v $(PWD):/app --workdir=/app davidsiaw/ocs sv2v
+SV2V_CMD=docker run --rm -v $$(pwd):/app --workdir=/app davidsiaw/sv2v sv2v
 SYSTEM_VERILOG_FILES=$(shell find src -type f -name '*.sv')
 SV2VED_SV_FILES=$(patsubst src/%.sv,obj/sv2ved/%.v,$(SYSTEM_VERILOG_FILES))
 VERILOG_FILES=$(shell find src -type f -name '*.v') $(SV2VED_SV_FILES)

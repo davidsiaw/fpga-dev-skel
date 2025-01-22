@@ -1,6 +1,6 @@
 # rules for building formal verification
 
-FORMAL_DOCKER_PREFIX=docker run --rm -v $(PWD):/src --workdir /src
+FORMAL_DOCKER_PREFIX=docker run --rm -v $$(pwd):/src --workdir /src
 FORMAL_DOCKER_IMAGE=davidsiaw/ocs
 FORMAL_CMD_PREFIX=$(FORMAL_DOCKER_PREFIX) $(FORMAL_DOCKER_IMAGE)
 

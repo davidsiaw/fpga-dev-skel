@@ -1,6 +1,6 @@
 # build gowin fs using gowin eda tools
 
-GOWIN_DOCKER_PREFIX=docker run --rm -v $(PWD):/src --workdir /src
+GOWIN_DOCKER_PREFIX=docker run --rm -v $$(pwd):/src --workdir /src
 GOWIN_DOCKER_IMAGE=davidsiaw/gwin-docker
 GOWIN_CMD_PREFIX=$(GOWIN_DOCKER_PREFIX) $(GOWIN_DOCKER_IMAGE)
 

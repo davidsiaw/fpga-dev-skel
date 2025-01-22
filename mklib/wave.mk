@@ -1,4 +1,4 @@
-IVERILOG_CMD_BASE=docker run --rm -ti -v $(PWD):/src --workdir=/src davidsiaw/ocs
+IVERILOG_CMD_BASE=docker run --rm -ti -v $$(pwd):/src --workdir=/src davidsiaw/ocs
 IVERILOG_CMD=$(IVERILOG_CMD_BASE) iverilog
 VVP_CMD=$(IVERILOG_CMD_BASE) vvp
 IVERILOG_PARAMS:=

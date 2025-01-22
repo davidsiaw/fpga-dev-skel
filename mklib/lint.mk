@@ -1,4 +1,4 @@
-VERILATOR_LINT_CMD_BASE=docker run --rm -ti -v $(PWD):/src --workdir=/src davidsiaw/ocs
+VERILATOR_LINT_CMD_BASE=docker run --rm -ti -v $$(pwd):/src --workdir=/src davidsiaw/ocs
 VERILATOR_LINT_CMD=$(VERILATOR_LINT_CMD_BASE) verilator --lint-only
 VERILATOR_LINT_PARAMS:=-Wall
 
