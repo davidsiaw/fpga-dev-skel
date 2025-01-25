@@ -5,15 +5,20 @@ module tn9k_count_diag
     output [5:0] led
 );
 
-  reg [31:0] cnt = 0;
+  reg [23:0] cnt;
+  reg [5:0] lednum;
 
   always @(posedge clk_27mhz) begin
-    cnt <= cnt + 1;
-    assume(cnt == $past(cnt));
+  	if ( cnt < 24'd12000000) begin
+      cnt <= cnt + 1;
+      lednum <= lednum;
+    end
+    else begin
+      cnt <= 0;
+      lednum <= lednum + 1;
+    end
   end
 
-  a: assert property(led != 0);
-
-  assign led = ~cnt[25:20];
+  assign led = ~lednum;
 
 endmodule

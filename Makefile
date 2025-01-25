@@ -45,7 +45,7 @@ $(TARGET_DIR)/%: targets/$(TARGET)
 	done
 
 clean:
-	rm -rf obj
+	docker run --rm -v $$(pwd):/app --workdir=/app davidsiaw/sv2v rm -rf obj
 
 .PHONY: clean all unpack_target
 

@@ -3,10 +3,10 @@ module Counter #(
 ) (
   input           rst,
   input           clk,
-  output [SIZE:0] q
+  output [SIZE-1:0] q
 );
 
-reg [SIZE:0] state;
+reg [SIZE-1:0] state;
 
 always @(posedge clk) begin
   if (rst) begin

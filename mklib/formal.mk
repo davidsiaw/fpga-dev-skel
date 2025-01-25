@@ -1,7 +1,7 @@
 # rules for building formal verification
 
 FORMAL_DOCKER_PREFIX=docker run --rm -v $$(pwd):/src --workdir /src
-FORMAL_DOCKER_IMAGE=davidsiaw/ocs
+FORMAL_DOCKER_IMAGE=davidsiaw/yosys-docker
 FORMAL_CMD_PREFIX=$(FORMAL_DOCKER_PREFIX) $(FORMAL_DOCKER_IMAGE)
 
 FORMAL_YOSYS=$(APICULA_CMD_PREFIX) yosys
@@ -12,20 +12,20 @@ obj/formal.sby: obj/args/topmodule $(VERILOG_FILES)
 	mkdir -p obj
 	rm -f $@
 	echo "[tasks]" > $@
-	echo "cover" >> $@
+	# echo "cover" >> $@
 	echo "bmc" >> $@
-	echo "prove" >> $@
+	# echo "prove" >> $@
 
 	echo "[options]" >> $@
-	echo "depth 20" >> $@
-	echo "cover: mode cover" >> $@
+	#echo "cover: mode cover" >> $@
 	echo "bmc: mode bmc" >> $@
-	echo "prove: mode prove" >> $@
+	#echo "prove: mode prove" >> $@
+	echo "depth 30" >> $@
 
 	echo "[engines]" >> $@
-	echo "cover: smtbmc z3" >> $@
-	echo "bmc: abc bmc3" >> $@
-	echo "prove: abc pdr" >> $@
+	#echo "cover: smtbmc z3" >> $@
+	echo "bmc: smtbmc" >> $@
+	#echo "prove: abc pdr" >> $@
 
 	echo "[script]" >> $@
 	for filename in $(filter-out $<,$^) ; do \

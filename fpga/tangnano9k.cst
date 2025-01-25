@@ -1,3 +1,5 @@
+IO_LOC "clk_27mhz" 52;
+
 IO_LOC "led[0]" 10;
 IO_LOC "led[1]" 11;
 IO_LOC "led[2]" 13;

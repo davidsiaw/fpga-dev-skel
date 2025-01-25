@@ -1,12 +1,12 @@
 # build gowin fs using yosys
 
 APICULA_DOCKER_PREFIX=docker run --rm -v $$(pwd):/src --workdir /src
-APICULA_DOCKER_IMAGE=davidsiaw/ocs
+APICULA_DOCKER_IMAGE=davidsiaw/yosys-docker
 APICULA_CMD_PREFIX=$(APICULA_DOCKER_PREFIX) $(APICULA_DOCKER_IMAGE)
 APICULA_FREQ := 27
 
 YOSYS=$(APICULA_CMD_PREFIX) yosys
-NEXTPNR_GOWIN=$(APICULA_CMD_PREFIX) nextpnr-gowin
+NEXTPNR_GOWIN=$(APICULA_CMD_PREFIX) nextpnr-himbaechel
 GOWIN_PACK=$(APICULA_CMD_PREFIX) gowin_pack
 READ_VERILOG_PARAMS:=
 
@@ -43,10 +43,17 @@ obj/apicula.json: obj/apicula.ys
 	$(YOSYS) $< | tee -a obj/yosys.log
 
 obj/gowin_pnr_apicula.json: obj/apicula.json obj/args/device_name obj/args/freq_mhz obj/args/apicula_cst $(shell cat obj/args/apicula_cst)
-	$(NEXTPNR_GOWIN) --json $< --write $@ --device $(shell cat obj/args/device_name) --freq $(shell cat obj/args/freq_mhz) --cst $(shell cat obj/args/apicula_cst) $(subst totee,nextpnr_apicula,$(TEE))
+	$(NEXTPNR_GOWIN) --json $< \
+					 --write $@ \
+					 --device $(shell cat obj/args/device_name) \
+					 --freq $(shell cat obj/args/freq_mhz) \
+					 --vopt cst=$(shell cat obj/args/apicula_cst) \
+					 --vopt family=$(shell cat obj/args/apicula_class) \
+					 $(subst totee,nextpnr_apicula,$(TEE))
 
 obj/apicula_pack.fs: obj/gowin_pnr_apicula.json obj/args/apicula_class
-	$(GOWIN_PACK) -d $(shell cat obj/args/apicula_class) -o $@ $< | $(subst totee,gowin_pack,$(TEE))
+	$(GOWIN_PACK) -d $(shell cat obj/args/apicula_class) \
+				  -o $@ $< | $(subst totee,gowin_pack,$(TEE))
 
 upload_apicula: obj/apicula_pack.fs obj/args/name
 	$(OPENFPGALOADER) -b $(shell cat obj/args/name) obj/apicula_pack.fs
