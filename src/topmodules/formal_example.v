@@ -16,7 +16,7 @@ module formal_example
     end
 
     `ifdef FORMAL
-      assert(cnt != 6);
+      assert(cnt != 3123);
     `endif
 
   end
