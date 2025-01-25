@@ -1,3 +1,5 @@
+// Modules to provide a 9 MHz clock
+
 `ifdef GOWIN_GW1NR_9_CHIP
 
 module Clk_9Mhz
